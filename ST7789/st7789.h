@@ -14,14 +14,14 @@ extern SPI_HandleTypeDef ST7789_SPI_PORT;
 //#define CFG_NO_CS
 
 /* Pin connection*/
-#define ST7789_RST_PORT ST7789_RST_GPIO_Port
-#define ST7789_RST_PIN  ST7789_RST_Pin
-#define ST7789_DC_PORT  ST7789_DC_GPIO_Port
-#define ST7789_DC_PIN   ST7789_DC_Pin
+#define ST7789_RST_PORT GPIOA
+#define ST7789_RST_PIN  GPIO_PIN_3
+#define ST7789_DC_PORT  GPIOA
+#define ST7789_DC_PIN   GPIO_PIN_2
 
 #ifndef CFG_NO_CS
-#define ST7789_CS_PORT  ST7789_CS_GPIO_Port
-#define ST7789_CS_PIN   ST7789_CS_Pin
+#define ST7789_CS_PORT  GPIOA
+#define ST7789_CS_PIN   GPIO_PIN_4
 #endif
 
 /* If u need Backlight control, uncomment below */
@@ -38,13 +38,14 @@ extern SPI_HandleTypeDef ST7789_SPI_PORT;
 
 /* Choose a type you are using */
 //#define USING_135X240
-#define USING_240X240
+//#define USING_240X240
 //#define USING_170X320
+#define USING_320X240
 
 /* Choose a display rotation you want to use: (0-3) */
 //#define ST7789_ROTATION 0
-//#define ST7789_ROTATION 1
-#define ST7789_ROTATION 2				//  use Normally on 240x240
+#define ST7789_ROTATION 1
+//#define ST7789_ROTATION 2				//  use Normally on 240x240
 //#define ST7789_ROTATION 3
 
 #ifdef USING_135X240
@@ -129,6 +130,27 @@ extern SPI_HandleTypeDef ST7789_SPI_PORT;
         #define X_SHIFT 0
         #define Y_SHIFT 35
     #endif
+
+#endif
+
+#ifdef USING_320X240
+
+    #define ST7789_WIDTH 320
+    #define ST7789_HEIGHT 240
+
+		#if ST7789_ROTATION == 0
+			#define X_SHIFT 0
+			#define Y_SHIFT 0
+		#elif ST7789_ROTATION == 1
+			#define X_SHIFT 0
+			#define Y_SHIFT 0
+		#elif ST7789_ROTATION == 2
+			#define X_SHIFT 0
+			#define Y_SHIFT 0
+		#elif ST7789_ROTATION == 3
+			#define X_SHIFT 0
+			#define Y_SHIFT 0
+		#endif
 
 #endif
 

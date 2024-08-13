@@ -141,7 +141,8 @@ void ST7789_Init(void)
     HAL_Delay(25);
     ST7789_RST_Set();
     HAL_Delay(50);
-		
+
+	ST7789_WriteCommand (ST7789_SLPOUT);	//	Out of sleep mode
     ST7789_WriteCommand(ST7789_COLMOD);		//	Set color mode
     ST7789_WriteSmallData(ST7789_COLOR_MODE_16bit);
   	ST7789_WriteCommand(0xB2);				//	Porch control
@@ -183,7 +184,7 @@ void ST7789_Init(void)
 		ST7789_WriteData(data, sizeof(data));
 	}
     ST7789_WriteCommand (ST7789_INVON);		//	Inversion ON
-	ST7789_WriteCommand (ST7789_SLPOUT);	//	Out of sleep mode
+
   	ST7789_WriteCommand (ST7789_NORON);		//	Normal Display on
   	ST7789_WriteCommand (ST7789_DISPON);	//	Main screen turned on	
 
@@ -742,6 +743,6 @@ void ST7789_Test(void)
 
 	//	If FLASH cannot storage anymore datas, please delete codes below.
 	ST7789_Fill_Color(WHITE);
-	ST7789_DrawImage(0, 0, 128, 128, (uint16_t *)saber);
+	ST7789_DrawImage(0, 0, 240, 240, (uint16_t *)tek);
 	HAL_Delay(3000);
 }
