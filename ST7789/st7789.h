@@ -2,26 +2,27 @@
 #define __ST7789_H
 #include "fonts.h"
 #include "main.h"
+#include "spi.h"
 
 /* choose a Hardware SPI port to use. */
 #define ST7789_SPI_PORT hspi1
 extern SPI_HandleTypeDef ST7789_SPI_PORT;
 
 /* choose whether use DMA or not */
-#define USE_DMA
+//#define USE_DMA
 
 /* If u need CS control, comment below*/
 //#define CFG_NO_CS
 
 /* Pin connection*/
 #define ST7789_RST_PORT GPIOA
-#define ST7789_RST_PIN  GPIO_PIN_3
+#define ST7789_RST_PIN  GPIO_PIN_0
 #define ST7789_DC_PORT  GPIOA
-#define ST7789_DC_PIN   GPIO_PIN_2
+#define ST7789_DC_PIN   GPIO_PIN_1
 
 #ifndef CFG_NO_CS
 #define ST7789_CS_PORT  GPIOA
-#define ST7789_CS_PIN   GPIO_PIN_4
+#define ST7789_CS_PIN   GPIO_PIN_8
 #endif
 
 /* If u need Backlight control, uncomment below */
@@ -44,9 +45,9 @@ extern SPI_HandleTypeDef ST7789_SPI_PORT;
 
 /* Choose a display rotation you want to use: (0-3) */
 //#define ST7789_ROTATION 0
-#define ST7789_ROTATION 1
+//#define ST7789_ROTATION 1
 //#define ST7789_ROTATION 2				//  use Normally on 240x240
-//#define ST7789_ROTATION 3
+#define ST7789_ROTATION 3
 
 #ifdef USING_135X240
 
@@ -182,6 +183,8 @@ extern SPI_HandleTypeDef ST7789_SPI_PORT;
 #define LGRAYBLUE   0XA651
 #define LBBLUE      0X2B12
 
+#define MYGREEN		0x8679
+
 /* Control Registers and constant codes */
 #define ST7789_NOP     0x00
 #define ST7789_SWRESET 0x01
@@ -266,6 +269,7 @@ void ST7789_InvertColors(uint8_t invert);
 
 /* Text functions. */
 void ST7789_WriteChar(uint16_t x, uint16_t y, char ch, FontDef font, uint16_t color, uint16_t bgcolor);
+void ST7789_WriteScaledChar(uint16_t x, uint16_t y, char ch, FontDef font, uint16_t color, uint16_t bgcolor, uint8_t scale);
 void ST7789_WriteString(uint16_t x, uint16_t y, const char *str, FontDef font, uint16_t color, uint16_t bgcolor);
 
 /* Extented Graphical functions. */

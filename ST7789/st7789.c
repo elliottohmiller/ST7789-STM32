@@ -446,10 +446,16 @@ void ST7789_WriteChar(uint16_t x, uint16_t y, char ch, FontDef font, uint16_t co
 	ST7789_Select();
 	ST7789_SetAddressWindow(x, y, x + font.width - 1, y + font.height - 1);
 
-	for (i = 0; i < font.height; i++) {
-		b = font.data[(ch - 32) * font.height + i];
-		for (j = 0; j < font.width; j++) {
-			if ((b << j) & 0x8000) {
+	for (i = 0; i < font.height; i++) { //iterate over rows
+		b = font.data[(ch - 32) * (font.height + i)];
+/*
+		select pixel: ch is ascii code, 32 is magic conversion to limited character set and corresponds to the row preceding selected letter;
+		(ch-31 = data character rows array); multiply by height (or the number of rows of previous character + i) to get first row data...
+		...represented as a uint16_t in selected letter. Therefore 'b' == 0 + i row data uint16_t.
+*/
+		for (j = 0; j < font.width; j++) { //iterate through columns
+
+			if ((b << j) & 0x8000) { //0x8000 corresponds to the 15th bit (16th pixel) in row data. Check if pixel is 'on' in 'j' position
 				uint8_t data[] = {color >> 8, color & 0xFF};
 				ST7789_WriteData(data, sizeof(data));
 			}
@@ -459,6 +465,46 @@ void ST7789_WriteChar(uint16_t x, uint16_t y, char ch, FontDef font, uint16_t co
 			}
 		}
 	}
+	ST7789_UnSelect();
+}
+
+void ST7789_WriteScaledChar(uint16_t x, uint16_t y, char ch, FontDef font, uint16_t color, uint16_t bgcolor, uint8_t scale)
+{
+	uint32_t i, b, j, k, l, m;
+	uint8_t height = font.height * scale;
+	uint8_t width = font.width * scale;
+
+	ST7789_Select();
+	ST7789_SetAddressWindow(x, y, x + width - 1, y + height - 1); //works correctly
+
+	for (i = 0; i < font.height; i++) {//iterate over rows
+
+	b = font.data[(ch - 32) * font.height + i]; //select row data
+
+	for (k = 0; k < scale; k++) { //repeat scale number of times
+
+
+		for (j = 0; j < font.width; ++j) {
+			if ((b << j) & 0x8000) {
+				uint8_t data[] = {color >> 8, color & 0xFF};
+
+				for (l = 0; l < scale; ++l)
+				{
+					ST7789_WriteData(data, sizeof(data));
+				}
+			}
+			else {
+				uint8_t data[] = {bgcolor >> 8, bgcolor & 0xFF};
+
+				for (m = 0; m < scale; ++m)
+				{
+					ST7789_WriteData(data, sizeof(data));
+				}
+			}
+		}
+		}
+	}
+
 	ST7789_UnSelect();
 }
 
